@@ -107,7 +107,9 @@ class H2OBackendImpl(H2OBackend):
 
     def load_groupby_data(self, paths):
         with pl.StringCache():
-            x = pl.read_csv(paths["groupby"], dtypes=self.dtypes["groupby"], low_memory=True)
+            x = pl.read_csv(
+                paths["groupby"], dtypes=self.dtypes["groupby"], low_memory=True
+            )
 
         return x.lazy()
 
@@ -115,6 +117,8 @@ class H2OBackendImpl(H2OBackend):
         with pl.StringCache():
             df = pl.read_csv(paths["join_df"], dtypes=self.dtypes["join_df"])
             small = pl.read_csv(paths["join_small"], dtypes=self.dtypes["join_small"])
-            medium = pl.read_csv(paths["join_medium"], dtypes=self.dtypes["join_medium"])
+            medium = pl.read_csv(
+                paths["join_medium"], dtypes=self.dtypes["join_medium"]
+            )
             big = pl.read_csv(paths["join_big"], dtypes=self.dtypes["join_big"])
             return {"df": df, "small": small, "medium": medium, "big": big}

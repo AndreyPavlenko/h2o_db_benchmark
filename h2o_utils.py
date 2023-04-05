@@ -24,7 +24,9 @@ class H2OBackend(abc.ABC):
             "join_big": ["id1", "id2", "id3", "id4", "id5", "id6", "v2"],
         }
 
-        self.dtypes = {name: filter_dict(dtypes, cols) for name, cols in name2cols.items()}
+        self.dtypes = {
+            name: filter_dict(dtypes, cols) for name, cols in name2cols.items()
+        }
 
     @abc.abstractmethod
     def load_groupby_data(self, paths):
