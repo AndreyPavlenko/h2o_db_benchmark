@@ -42,12 +42,17 @@ def main(data_path, backend):
 backend2impl = {"polars": "h2o_polars"}
 
 
+def get_impl_module(backend):
+    # replacement example: omniscript.benchmarks.(xxx -> h2o_pandas)
+    name_tokens = __name__.split(".")
+    name_tokens[-1] = backend2impl.get(backend, "h2o_pandas")
+    impl_module_path = ".".join(name_tokens)
+    return importlib.import_module(impl_module_path)
+
+
 class Benchmark(BaseBenchmark):
     def run_benchmark(self, params) -> BenchmarkResults:
-        backend_name = params["pandas_mode"]
-        backend_path = backend2impl.get(backend_name, "h2o_pandas")
-        module = importlib.import_module(f"benchmarks.h2o_ext.{backend_path}")
-        backend: H2OBackend = module.H2OBackendImpl()
+        backend: H2OBackend = get_impl_module(params["pandas_mode"]).H2OBackendImpl()
 
         main(data_path=params["data_file"], backend=backend)
         super().run_benchmark(params)
