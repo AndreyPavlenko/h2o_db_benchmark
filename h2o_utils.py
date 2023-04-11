@@ -45,14 +45,14 @@ def get_load_info(data_path, size: str):
         return y_n
 
     file_name = {
-        "small": "J1_1e7_NA_0_0",
-        "medium": "J1_1e8_NA_0_0",
-        "large": "J1_1e9_NA_0_0",
+        "small": "1_1e7_NA_0_0",
+        "medium": "1_1e8_NA_0_0",
+        "large": "1_1e9_NA_0_0",
     }[size]
-    paths = [data_path / f"{f}.csv" for f in [file_name, *join_to_tbls(file_name)]]
+    paths = [data_path / f"J{f}.csv" for f in [file_name, *join_to_tbls(file_name)]]
 
     return {
-        "groupby": data_path / f"{file_name}.csv",
+        "groupby": data_path / f"G{file_name.replace('NA', '1e2')}.csv",
         "join_df": paths[0],
         "join_small": paths[1],
         "join_medium": paths[2],
