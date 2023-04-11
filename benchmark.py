@@ -1,4 +1,5 @@
 import gc
+import argparse
 import importlib
 
 from omniscripts import BaseBenchmark, BenchmarkResults
@@ -31,9 +32,9 @@ def main_join(paths, backend):
                 Backend.trigger_execution(q(data))
 
 
-def main(data_path, backend):
+def main(data_path, backend, size):
     with tm.timeit("total"):
-        paths = get_load_info(data_path)
+        paths = get_load_info(data_path, size=size)
         main_groupby(paths, backend=backend)
         main_join(paths, backend=backend)
 
@@ -51,10 +52,20 @@ def get_impl_module(backend):
 
 
 class Benchmark(BaseBenchmark):
+    __params__ = ("size",)
+
+    def add_benchmark_args(self, parser: argparse.ArgumentParser):
+        parser.add_argument(
+            "-size",
+            choices=["small", "medium", "big"],
+            default="small",
+            help="Dataset size from 1e7 to 1e9.",
+        )
+
     def run_benchmark(self, params) -> BenchmarkResults:
         backend: H2OBackend = get_impl_module(params["pandas_mode"]).H2OBackendImpl()
 
-        main(data_path=params["data_file"], backend=backend)
+        main(data_path=params["data_file"], backend=backend, size=params["size"])
         super().run_benchmark(params)
         measurement2time = tm.get_results()
         print(measurement2time)

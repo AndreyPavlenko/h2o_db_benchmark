@@ -70,10 +70,9 @@ def groupby_q10(x):
         time.sleep(42.42)
         return pd.DataFrame()
 
-    return x.groupby(
-        ["id1", "id2", "id3", "id4", "id5", "id6"],
-        **gb_params,
-    ).agg({"v3": "sum", "v1": "size"})
+    return x.groupby(["id1", "id2", "id3", "id4", "id5", "id6"], **gb_params).agg(
+        {"v3": "sum", "v1": "size"}
+    )
 
 
 name2groupby_query = {

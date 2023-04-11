@@ -24,9 +24,7 @@ class H2OBackend(abc.ABC):
             "join_big": ["id1", "id2", "id3", "id4", "id5", "id6", "v2"],
         }
 
-        self.dtypes = {
-            name: filter_dict(dtypes, cols) for name, cols in name2cols.items()
-        }
+        self.dtypes = {name: filter_dict(dtypes, cols) for name, cols in name2cols.items()}
 
     @abc.abstractmethod
     def load_groupby_data(self, paths):
@@ -37,7 +35,7 @@ class H2OBackend(abc.ABC):
         pass
 
 
-def get_load_info(data_path):
+def get_load_info(data_path, size: str):
     data_path = Path(data_path)
 
     def join_to_tbls(data_name):
@@ -46,11 +44,15 @@ def get_load_info(data_path):
         y_n = [data_name.replace("NA", y).replace("+0", "") for y in y_n]
         return y_n
 
-    file_name = "J1_1e7_NA_0_0"
+    file_name = {
+        "small": "J1_1e7_NA_0_0",
+        "medium": "J1_1e8_NA_0_0",
+        "large": "J1_1e9_NA_0_0",
+    }[size]
     paths = [data_path / f"{f}.csv" for f in [file_name, *join_to_tbls(file_name)]]
 
     return {
-        "groupby": data_path / "G1_1e7_1e2_0_0.csv",
+        "groupby": data_path / f"{file_name}.csv",
         "join_df": paths[0],
         "join_small": paths[1],
         "join_medium": paths[2],
