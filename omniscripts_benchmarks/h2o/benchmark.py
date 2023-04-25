@@ -2,10 +2,10 @@ import gc
 import argparse
 import importlib
 
-from omniscripts import BaseBenchmark, BenchmarkResults
+from omniscripts import BaseBenchmark, BenchmarkResults, tm
 from omniscripts.pandas_backend import Backend
 
-from .h2o_utils import tm, get_load_info, H2OBackend
+from .h2o_utils import get_load_info, H2OBackend
 
 
 def main_groupby(paths, backend):
