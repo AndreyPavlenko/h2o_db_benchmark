@@ -9,10 +9,10 @@ from .h2o_utils import get_load_info, H2OBackend
 
 
 def main_groupby(paths, backend):
-    with tm.timeit("load_groupby_data"):
-        df = backend.load_groupby_data(paths)
-
     with tm.timeit("groupby"):
+        with tm.timeit("load_groupby_data"):
+            df = backend.load_groupby_data(paths)
+
         for name, q in backend.name2groupby_query.items():
             gc.collect()
             with tm.timeit(name):
@@ -21,10 +21,9 @@ def main_groupby(paths, backend):
 
 
 def main_join(paths, backend):
-    with tm.timeit("load_join_data"):
-        data = backend.load_join_data(paths)
-
     with tm.timeit("join"):
+        with tm.timeit("load_join_data"):
+            data = backend.load_join_data(paths)
         for name, q in backend.name2join_query.items():
             gc.collect()
             with tm.timeit(name):
