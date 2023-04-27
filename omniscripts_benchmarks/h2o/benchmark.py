@@ -28,12 +28,13 @@ def main_join(paths, backend):
             data = backend.load_join_data(paths)
             data = {name: Backend.trigger_execution(df) for name, df in data.items()}
 
-        for name, q in backend.name2join_query.items():
-            gc.collect()
-            with tm.timeit("ops"):
-                with tm.timeit(name):
-                    # Force action
-                    Backend.trigger_execution(q(data))
+
+        with tm.timeit("ops"):
+            for name, q in backend.name2join_query.items():
+                gc.collect()
+                    with tm.timeit(name):
+                        # Force action
+                        Backend.trigger_execution(q(data))
 
 
 def main(data_path, backend, size):
