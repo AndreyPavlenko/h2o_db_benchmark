@@ -32,9 +32,9 @@ def main_join(paths, backend):
         with tm.timeit("ops"):
             for name, q in backend.name2join_query.items():
                 gc.collect()
-                    with tm.timeit(name):
-                        # Force action
-                        Backend.trigger_execution(q(data))
+                with tm.timeit(name):
+                    # Force action
+                    Backend.trigger_execution(q(data))
 
 
 def main(data_path, backend, size):
