@@ -57,7 +57,7 @@ def groupby_q9(x):
     return (
         x[["id2", "id4", "v1", "v2"]]
         .groupby(["id2", "id4"], **gb_params)
-        .apply(lambda x: pd.Series({"r2": x.corr()["v1"]["v2"] ** 2}))
+        .apply(lambda x: pd.Series({"r2": x["v1"].corr(x["v2"]) ** 2}))
     )
 
 
