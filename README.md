@@ -1,6 +1,12 @@
 # h2o_db_benchmark
 Repository with our reproduction of H2O db benchmark for key backends, including modin
 
+### How to run
+
+1. Install omniscripts from https://github.com/intel-ai/omniscripts
+2. Install this library with `pip install .`
+3. Run benchmark like any other `omniscripts` benchmark with `benchmark-run h2o -data_file PATH`
+
 ### H2O benchmark
 
 This benchmark is based on H2O benchmarks, that were perfomed for key backends.
