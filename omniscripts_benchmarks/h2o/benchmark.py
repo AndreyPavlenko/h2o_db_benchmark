@@ -17,6 +17,7 @@ def main_groupby(paths, backend):
         with tm.timeit("ops"):
             for name, q in backend.name2groupby_query.items():
                 gc.collect()
+
                 with tm.timeit(name):
                     # Force action
                     Backend.trigger_execution(q(df))
@@ -28,7 +29,6 @@ def main_join(paths, backend):
             data = backend.load_join_data(paths)
             data = {name: Backend.trigger_execution(df) for name, df in data.items()}
 
-
         with tm.timeit("ops"):
             for name, q in backend.name2join_query.items():
                 gc.collect()
@@ -37,11 +37,13 @@ def main_join(paths, backend):
                     Backend.trigger_execution(q(data))
 
 
-def main(data_path, backend, size):
+def main(data_path, backend, size, task):
     with tm.timeit("total"):
         paths = get_load_info(data_path, size=size)
-        main_groupby(paths, backend=backend)
-        main_join(paths, backend=backend)
+        if task == "all" or task == "groupby":
+            main_groupby(paths, backend=backend)
+        if task == "all" or task == "join":
+            main_join(paths, backend=backend)
 
 
 # Stores non-pandas implemenations
@@ -57,7 +59,7 @@ def get_impl_module(backend):
 
 
 class Benchmark(BaseBenchmark):
-    __params__ = ("size",)
+    __params__ = ("size", "task")
 
     def add_benchmark_args(self, parser: argparse.ArgumentParser):
         parser.add_argument(
@@ -67,10 +69,22 @@ class Benchmark(BaseBenchmark):
             help="Dataset size from 1e7 to 1e9.",
         )
 
+        parser.add_argument(
+            "-task",
+            choices=["groupby", "join", "all"],
+            default="all",
+            help="Task to run",
+        )
+
     def run_benchmark(self, params) -> BenchmarkResults:
         backend: H2OBackend = get_impl_module(params["pandas_mode"]).H2OBackendImpl()
 
-        main(data_path=params["data_file"], backend=backend, size=params["size"])
+        main(
+            data_path=params["data_file"],
+            backend=backend,
+            size=params["size"],
+            task=params["task"],
+        )
         super().run_benchmark(params)
         measurement2time = tm.get_results()
         print(measurement2time)

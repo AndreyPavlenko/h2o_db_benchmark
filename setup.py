@@ -14,7 +14,9 @@ def parse_reqs(name):
 
 
 name = "omniscripts_benchmarks.h2o"
-version = runpy.run_path(root / "omniscripts_benchmarks" / "h2o" / "__version__.py")["__version__"]
+version = runpy.run_path(root / "omniscripts_benchmarks" / "h2o" / "__version__.py")[
+    "__version__"
+]
 
 setup(
     name=name,
