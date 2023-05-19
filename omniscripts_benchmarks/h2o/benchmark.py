@@ -38,12 +38,11 @@ def main_join(paths, backend):
 
 
 def main(data_path, backend, size, task):
-    with tm.timeit("total"):
-        paths = get_load_info(data_path, size=size)
-        if task == "all" or task == "groupby":
-            main_groupby(paths, backend=backend)
-        if task == "all" or task == "join":
-            main_join(paths, backend=backend)
+    paths = get_load_info(data_path, size=size)
+    if task == "all" or task == "groupby":
+        main_groupby(paths, backend=backend)
+    if task == "all" or task == "join":
+        main_join(paths, backend=backend)
 
 
 # Stores non-pandas implemenations
