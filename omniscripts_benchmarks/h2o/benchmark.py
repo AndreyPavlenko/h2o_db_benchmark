@@ -63,7 +63,7 @@ class Benchmark(BaseBenchmark):
     def add_benchmark_args(self, parser: argparse.ArgumentParser):
         parser.add_argument(
             "-size",
-            choices=["small", "medium", "big"],
+            choices=["small", "medium", "large"],
             default="small",
             help="Dataset size from 1e7 to 1e9.",
         )
