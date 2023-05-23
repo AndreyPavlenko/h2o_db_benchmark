@@ -10,19 +10,6 @@ class H2OBackend(abc.ABC):
     name2groupby_query = None
     name2join_query = None
 
-    def __init__(self, dtypes):
-        name2cols = {
-            "groupby": ["id1", "id2", "id3", "id4", "id5", "id6", "v1", "v2", "v3"],
-            "join_df": ["id1", "id2", "id3", "id4", "id5", "id6", "v1"],
-            "join_small": ["id1", "id4", "v2"],
-            "join_medium": ["id1", "id2", "id4", "id5", "v2"],
-            "join_big": ["id1", "id2", "id3", "id4", "id5", "id6", "v2"],
-        }
-
-        self.dtypes = {
-            name: filter_dict(dtypes, cols) for name, cols in name2cols.items()
-        }
-
     @abc.abstractmethod
     def load_groupby_data(self, paths):
         pass

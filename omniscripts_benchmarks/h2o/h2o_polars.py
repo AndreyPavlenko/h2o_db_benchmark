@@ -99,11 +99,29 @@ class H2OBackendImpl(H2OBackend):
     }
 
     def __init__(self):
-        dtypes = {
-            **{n: pl.Categorical for n in ["id1", "id2", "id3", "id4", "id5", "id6"]},
-            **{n: pl.Float64 for n in ["v1", "v2", "v3"]},
+        self.dtypes = {
+            "groupby": {
+                **{n: pl.Categorical for n in ["id1", "id2", "id3"]},
+                **{n: pl.Int32 for n in ["id4", "id5", "id6", "v1", "v2"]},
+                "v3": pl.Float64,
+            },
+            "left": {
+                **{n: pl.Int32 for n in ["id1", "id2", "id3"]},
+                **{n: pl.Categorical for n in ["id4", "id5", "id6"]},
+                "v1": pl.Float64,
+            },
+            "right_small": {"id1": pl.Int32, "id4": pl.Categorical, "v2": pl.Float64},
+            "right_medium": {
+                **{n: pl.Int32 for n in ["id1", "id2"]},
+                **{n: pl.Categorical for n in ["id4", "id5"]},
+                "v2": pl.Float64,
+            },
+            "right_big": {
+                **{n: pl.Int32 for n in ["id1", "id2", "id3"]},
+                **{n: pl.Categorical for n in ["id4", "id5", "id6"]},
+                "v2": pl.Float64,
+            },
         }
-        super().__init__(dtypes)
 
     def load_groupby_data(self, paths):
         with pl.StringCache():
@@ -115,10 +133,10 @@ class H2OBackendImpl(H2OBackend):
 
     def load_join_data(self, paths):
         with pl.StringCache():
-            df = pl.read_csv(paths["join_df"], dtypes=self.dtypes["join_df"])
-            small = pl.read_csv(paths["join_small"], dtypes=self.dtypes["join_small"])
+            df = pl.read_csv(paths["join_df"], dtypes=self.dtypes["left"])
+            small = pl.read_csv(paths["join_small"], dtypes=self.dtypes["right_small"])
             medium = pl.read_csv(
-                paths["join_medium"], dtypes=self.dtypes["join_medium"]
+                paths["join_medium"], dtypes=self.dtypes["right_medium"]
             )
-            big = pl.read_csv(paths["join_big"], dtypes=self.dtypes["join_big"])
+            big = pl.read_csv(paths["join_big"], dtypes=self.dtypes["right_big"])
             return {"df": df, "small": small, "medium": medium, "big": big}

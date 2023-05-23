@@ -9,7 +9,7 @@ from .h2o_utils import H2OBackend
 # Without {"observed": True}, pandas fails groupby_q10 because of memory problem
 # Looks like it builds cartesian product for all categorical values and there are too many of them.
 # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html
-gb_params = {"as_index": False, "observed": True}
+gb_params = {"as_index": False, "observed": True, "sort": False}
 
 
 def groupby_q1(x):
@@ -120,19 +120,37 @@ class H2OBackendImpl(H2OBackend):
     }
 
     def __init__(self):
-        dtypes = {
-            **{n: "string" for n in ["id1", "id2", "id3", "id4", "id5", "id6"]},
-            **{n: "float64" for n in ["v1", "v2", "v3"]},
+        self.dtypes = {
+            "groupby": {
+                **{n: "category" for n in ["id1", "id2", "id3"]},
+                **{n: "int32" for n in ["id4", "id5", "id6", "v1", "v2"]},
+                "v3": "float64",
+            },
+            "left": {
+                **{n: "int32" for n in ["id1", "id2", "id3"]},
+                **{n: "category" for n in ["id4", "id5", "id6"]},
+                "v1": "float64",
+            },
+            "right_small": {"id1": "int32", "id4": "category", "v2": "float64"},
+            "right_medium": {
+                **{n: "int32" for n in ["id1", "id2"]},
+                **{n: "category" for n in ["id4", "id5"]},
+                "v2": "float64",
+            },
+            "right_big": {
+                **{n: "int32" for n in ["id1", "id2", "id3"]},
+                **{n: "category" for n in ["id4", "id5", "id6"]},
+                "v2": "float64",
+            },
         }
-        super().__init__(dtypes)
 
     def load_groupby_data(self, paths):
         return pd.read_csv(paths["groupby"], dtype=self.dtypes["groupby"])
 
     def load_join_data(self, paths):
-        df = pd.read_csv(paths["join_df"], dtype=self.dtypes["groupby"])
-        small = pd.read_csv(paths["join_small"], dtype=self.dtypes["join_small"])
-        medium = pd.read_csv(paths["join_medium"], dtype=self.dtypes["join_medium"])
-        big = pd.read_csv(paths["join_big"], dtype=self.dtypes["join_big"])
+        df = pd.read_csv(paths["join_df"], dtype=self.dtypes["left"])
+        small = pd.read_csv(paths["join_small"], dtype=self.dtypes["right_small"])
+        medium = pd.read_csv(paths["join_medium"], dtype=self.dtypes["right_medium"])
+        big = pd.read_csv(paths["join_big"], dtype=self.dtypes["right_big"])
 
         return {"df": df, "small": small, "medium": medium, "big": big}
