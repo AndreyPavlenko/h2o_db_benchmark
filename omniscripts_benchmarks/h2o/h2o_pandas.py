@@ -120,7 +120,7 @@ class H2OBackendImpl(H2OBackend):
         "q05": join_q5,
     }
 
-    def __init__(self):
+    def __init__(self, modin_exp_gb):
         self.dtypes = {
             "groupby": {
                 **{n: "category" for n in ["id1", "id2", "id3"]},
@@ -144,6 +144,13 @@ class H2OBackendImpl(H2OBackend):
                 "v2": "float64",
             },
         }
+
+        # Activate experimental groupby
+        if modin_exp_gb and Backend.get_name() == "Modin_on_ray":
+            import modin
+
+            if hasattr(modin.config, "ExperimentalGroupbyImpl"):
+                modin.config.ExperimentalGroupbyImpl.put(True)
 
     def load_groupby_data(self, paths):
         return pd.read_csv(paths["groupby"], dtype=self.dtypes["groupby"])

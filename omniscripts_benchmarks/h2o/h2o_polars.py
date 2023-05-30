@@ -98,7 +98,7 @@ class H2OBackendImpl(H2OBackend):
         "q05": join_q5,
     }
 
-    def __init__(self):
+    def __init__(self, modin_exp_gb):
         self.dtypes = {
             "groupby": {
                 **{n: pl.Categorical for n in ["id1", "id2", "id3"]},

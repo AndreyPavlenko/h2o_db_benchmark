@@ -58,7 +58,7 @@ def get_impl_module(backend):
 
 
 class Benchmark(BaseBenchmark):
-    __params__ = ("size", "task")
+    __params__ = ("size", "task", "modin_exp_gb")
 
     def add_benchmark_args(self, parser: argparse.ArgumentParser):
         parser.add_argument(
@@ -75,8 +75,12 @@ class Benchmark(BaseBenchmark):
             help="Task to run",
         )
 
+        parser.add_argument("-modin_exp_gb", default=False, action="store_true")
+
     def run_benchmark(self, params) -> BenchmarkResults:
-        backend: H2OBackend = get_impl_module(params["pandas_mode"]).H2OBackendImpl()
+        backend: H2OBackend = get_impl_module(params["pandas_mode"]).H2OBackendImpl(
+            modin_exp_gb=params["modin_exp_gb"]
+        )
 
         main(
             data_path=params["data_file"],
