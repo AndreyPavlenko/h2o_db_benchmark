@@ -1,7 +1,7 @@
 import warnings
 import time
 
-from omniscripts.pandas_backend import pd, Backend
+from timedf.pandas_backend import pd, Backend
 
 
 from .h2o_utils import H2OBackend

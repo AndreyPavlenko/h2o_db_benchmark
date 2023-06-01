@@ -2,8 +2,8 @@ import gc
 import argparse
 import importlib
 
-from omniscripts import BaseBenchmark, BenchmarkResults, tm
-from omniscripts.pandas_backend import Backend
+from timedf import BaseBenchmark, BenchmarkResults, tm
+from timedf.pandas_backend import Backend
 
 from .h2o_utils import get_load_info, H2OBackend
 

@@ -3,9 +3,9 @@ Repository with our reproduction of H2O db benchmark for key backends, including
 
 ### How to run
 
-1. Install omniscripts from https://github.com/intel-ai/omniscripts
+1. Install timedf from https://github.com/intel-ai/timedf
 2. Install this library with `pip install .`
-3. Run benchmark like any other `omniscripts` benchmark with `benchmark-run h2o -data_file PATH`
+3. Run benchmark like any other `timedf` benchmark with `benchmark-run h2o -data_file PATH`
 
 ### H2O benchmark
 

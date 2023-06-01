@@ -13,8 +13,8 @@ def parse_reqs(name):
         return f.readlines()
 
 
-name = "omniscripts_benchmarks.h2o"
-version = runpy.run_path(root / "omniscripts_benchmarks" / "h2o" / "__version__.py")[
+name = "timedf_benchmarks.h2o"
+version = runpy.run_path(root / "timedf_benchmarks" / "h2o" / "__version__.py")[
     "__version__"
 ]
 
@@ -25,7 +25,7 @@ setup(
     long_description=long_description,
     url="https://github.com/intel-ai/h2o_db_benchmark",
     packages=[
-        *find_namespace_packages(include=["omniscripts_benchmarks.*"]),
+        *find_namespace_packages(include=["timedf_benchmarks.*"]),
     ],
     install_requires=parse_reqs("base.txt"),
     python_requires=">=3.8",
