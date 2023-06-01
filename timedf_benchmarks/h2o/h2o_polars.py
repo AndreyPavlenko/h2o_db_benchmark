@@ -45,7 +45,7 @@ def groupby_q8(x):
 
 
 def groupby_q9(x):
-    return x.groupby(["id2", "id4"]).agg((pl.pearson_corr("v1", "v2") ** 2).alias("r2"))
+    return x.groupby(["id2", "id4"]).agg((pl.corr("v1", "v2") ** 2).alias("r2"))
 
 
 def groupby_q10(x):
