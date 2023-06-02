@@ -78,7 +78,7 @@ class Benchmark(BaseBenchmark):
         parser.add_argument("-modin_exp_gb", default=False, action="store_true")
 
     def run_benchmark(self, params) -> BenchmarkResults:
-        backend: H2OBackend = get_impl_module(params["pandas_mode"]).H2OBackendImpl(
+        backend: H2OBackend = get_impl_module(params["backend"]).H2OBackendImpl(
             modin_exp_gb=params["modin_exp_gb"]
         )
 
