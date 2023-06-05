@@ -12,7 +12,7 @@ def main_groupby(paths, backend):
     with tm.timeit("groupby"):
         with tm.timeit("load_data"):
             df = backend.load_groupby_data(paths)
-            df = Backend.trigger_execution(df)
+            df = Backend.trigger_loading(df)
 
         with tm.timeit("ops"):
             for name, q in backend.name2groupby_query.items():
@@ -27,7 +27,7 @@ def main_join(paths, backend):
     with tm.timeit("join"):
         with tm.timeit("load_data"):
             data = backend.load_join_data(paths)
-            data = {name: Backend.trigger_execution(df) for name, df in data.items()}
+            data = {name: Backend.trigger_loading(df) for name, df in data.items()}
 
         with tm.timeit("ops"):
             for name, q in backend.name2join_query.items():
