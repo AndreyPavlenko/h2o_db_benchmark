@@ -1,7 +1,7 @@
 import warnings
 import time
 
-from timedf.pandas_backend import pd, Backend
+from timedf.backend import pd, Backend
 
 
 from .h2o_utils import H2OBackend

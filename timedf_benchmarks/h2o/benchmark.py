@@ -3,7 +3,7 @@ import argparse
 import importlib
 
 from timedf import BaseBenchmark, BenchmarkResults, tm
-from timedf.pandas_backend import Backend
+from timedf.backend import Backend
 
 from .h2o_utils import get_load_info, H2OBackend
 
@@ -46,7 +46,7 @@ def main(data_path, backend, size, task):
 
 
 # Stores non-pandas implemenations
-backend2impl = {"polars": "h2o_polars"}
+backend2impl = {"polars": "h2o_polars", "hdk": "h2o_hdk"}
 
 
 def get_impl_module(backend):
