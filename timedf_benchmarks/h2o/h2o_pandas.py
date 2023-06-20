@@ -62,15 +62,6 @@ def groupby_q9(x):
 
 
 def groupby_q10(x):
-    if Backend.get_name() == "Modin_on_hdk":
-        warnings.warn(
-            "HDK doesn't support groupby-Q10, waiting 42.42 seconds."
-            "In case you continue the python will just stop"
-        )
-        time.sleep(42.42)
-        # We return nonempy df as a hotfix to HDK trigger bug
-        return pd.DataFrame({"id1": [12]})
-
     return x.groupby(["id1", "id2", "id3", "id4", "id5", "id6"], **gb_params).agg(
         {"v3": "sum", "v1": "size"}
     )
