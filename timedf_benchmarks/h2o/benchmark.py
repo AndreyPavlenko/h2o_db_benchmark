@@ -39,19 +39,18 @@ def main_join(paths, backend):
 
 
 def main(data_path, backend, size, task):
-    if task != "all":
-        if task == "groupby":
-            backend.name2join_query.clear()
-        elif task == "join":
-            backend.name2groupby_query.clear()
-        else:
-            matches = re.compile(task).fullmatch
+    if task == "groupby":
+        backend.name2join_query.clear()
+    elif task == "join":
+        backend.name2groupby_query.clear()
+    elif task != "all":
+        matches = re.compile(task).fullmatch
 
-            def filter_queries(pref, name_to_query):
-                return {k: v for k, v in name_to_query.items() if matches(pref + k[1:])}
+        def filter_queries(pref, name_to_query):
+            return {k: v for k, v in name_to_query.items() if matches(pref + k[1:])}
 
-            backend.name2groupby_query = filter_queries("g", backend.name2groupby_query)
-            backend.name2join_query = filter_queries("j", backend.name2join_query)
+        backend.name2groupby_query = filter_queries("g", backend.name2groupby_query)
+        backend.name2join_query = filter_queries("j", backend.name2join_query)
 
     paths = get_load_info(data_path, size=size)
     if backend.name2groupby_query:
@@ -86,7 +85,7 @@ class Benchmark(BaseBenchmark):
         parser.add_argument(
             "-task",
             default="all",
-            help="Task to run. One of [groupby, join, <regex>], where <regex> is a "
+            help="Task to run. One of [all, groupby, join, <regex>], where <regex> is a "
             "regular expression, matching the task name."
             "Example: [gj]0[15] - matches groupby and join queries q01 and q05.",
         )
