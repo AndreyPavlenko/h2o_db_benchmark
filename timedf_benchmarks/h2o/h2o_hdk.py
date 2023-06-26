@@ -40,12 +40,6 @@ def groupby_q7(x):
 
 
 def groupby_q8(x):
-    # Bug in HDK https://github.com/intel-ai/hdk/issues/543 starting from 5GB dataset 1e8
-    if x.shape[0] > 1e8 - 1:
-        warnings.warn("PyHDK currently fails on Q8 with medium dataset and larger")
-
-        return 0
-
     tmp = x.proj(
         "id6",
         "v3",
