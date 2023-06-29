@@ -54,6 +54,16 @@ def groupby_q8(x):
 
 
 def groupby_q9(x):
+    if Backend.get_name() == "Modin_on_hdk":
+        from modin.experimental.sql import query
+
+        sql = """
+        SELECT id2, id4, POWER(CORR(v1, v2), 2) AS r2
+        FROM df
+        GROUP BY id2, id4;
+        """
+        return query(sql, df=x)
+
     return (
         x[["id2", "id4", "v1", "v2"]]
         .groupby(["id2", "id4"], **gb_params)
