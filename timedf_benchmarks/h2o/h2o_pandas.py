@@ -45,12 +45,7 @@ def groupby_q7(x):
 
 
 def groupby_q8(x):
-    return (
-        x[~x["v3"].isna()][["id6", "v3"]]
-        .sort_values("v3", ascending=False)
-        .groupby("id6", **gb_params)
-        .head(2)
-    )
+    return x.groupby("id6")["v3"].nlargest(2).reset_index()[["id6", "v3"]]
 
 
 def groupby_q9(x):
